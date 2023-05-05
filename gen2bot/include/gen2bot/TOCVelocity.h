@@ -4,8 +4,7 @@
 
 #include "ros/ros.h"
 #include <iostream>
-#include <string>
-
+#include <std::string>
 
 class TOCVelocity
 {
@@ -13,16 +12,24 @@ class TOCVelocity
 public:
 	TOCVelocity(ros::NodeHandle nh);
 
-	template<typename T>
-	void ConfigMotionMagic(T* talon1, T* talon2, int vel, int accel, int pos);
+	void ConfigMotionMagic(TalonFX* talon1, int vel, int accel, int pos);
+	void ConfigMotionMagic(TalonSRX* talon1, TalonSRX* talon2, int vel, int accel, int pos);
 
-	template<typename T>
-	void displayData(T* talon1, T* talon2, std::string name);
+	void displayData(TalonFX* talon1, std::string name);
+	void displayData(TalonSRX* talon1, TalonSRX* talon2, std::string name);
+
+	bool ReverseLimitSwitchTriggered(TalonFX* talon1, std::string name);
+	bool ReverseLimitSwitchTriggered(TalonSRX* talon1, TalonSRX* talon2, std::string name);
+
+	bool isNear(int a, int b, int tolerance);
+
+	bool TargetPositionReached(TalonFX* talon1, int pos, std::string name);
+	bool TargetPositionReached(TalonSRX* talon1, TalonSRX* talon2, int pos, std::string name);
+
+	bool CheckMode(int laPos, int buPos, int bsPos);
 
 	void zeroStart(int& p_cmd, ros::NodeHandle  nh);
 	void zero(int& p_cmd, ros::NodeHandle  nh);
-	void zero2(int& p_cmd, ros::NodeHandle  nh);
-	void zero3(int& p_cmd, ros::NodeHandle  nh);
 
 	void driveMode(int& p_cmd, ros::NodeHandle  nh);
 	void deposit(int& p_cmd, ros::NodeHandle  nh);
@@ -39,6 +46,8 @@ public:
 
 
 	int sentinel;
+
+	int mBuffer;
 
 	// la = linear actuator
 	double laDrivePosition;
