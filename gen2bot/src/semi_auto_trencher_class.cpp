@@ -408,7 +408,8 @@ semi_auto_trencher_class::semi_auto_trencher_class(ros::NodeHandle nh) : base_tr
 	void semi_auto_trencher_class::moveWheelsToSieve()
 	{
 		double newPos = calculateDistanceWheels();
+
 		ctre::phoenix::unmanaged::Unmanaged::FeedEnable(100000);
-		leftWheel.Set(ControlMode::Position, (newPos + leftWheel.GetSelectedSensorPosition()));
-		rightWheel.Set(ControlMode::Position, (newPos + leftWheel.GetSelectedSensorPosition()));
+		ConfigMotionMagic(&leftWheel, 15, 5, newPos + leftWheel.GetSelectedSensorPosition());
+        	ConfigMotionMagic(&rightWheel, 15, 5, newPos + rightWheel.GetSelectedSensorPosition());
 	}
